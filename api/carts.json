@@ -12,7 +12,19 @@
       },
       {
         "product": 5,
-        "quantity": 2
+        "quantity": 3
+      },
+      {
+        "product": 6,
+        "quantity": 1
+      },
+      {
+        "product": 7,
+        "quantity": 3
+      },
+      {
+        "product": 8,
+        "quantity": 1
       }
     ]
   },
@@ -39,6 +51,18 @@
       {
         "product": 2,
         "quantity": 5
+      },
+      {
+        "product": 8,
+        "quantity": 3
+      },
+      {
+        "product": 9,
+        "quantity": 2
+      },
+      {
+        "product": 10,
+        "quantity": 1
       }
     ]
   }

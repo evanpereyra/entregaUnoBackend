@@ -319,7 +319,7 @@ app.post("/api/carts/", (req, res)=>{
         }
 
         const result = cm.addCarrito(prod)
-    console.log("llego aca")
+    
     if (!result || typeof result === "string") {
       return res.status(409).json({
         error: "Error al crear carrito",
@@ -373,7 +373,8 @@ app.post("/api/carts/:cid/product/:pid", (req, res)=>{
 
     // Verificar que el carrito existe
     const cart = cm.getCartByCid(cid);
-    if (!cart) {
+
+    if (!cart || typeof cart === "string") {
       return res.status(404).json({
         error: "Carrito no encontrado",
         message: `No se encontró un carrito con ID ${cid}`
@@ -381,8 +382,9 @@ app.post("/api/carts/:cid/product/:pid", (req, res)=>{
     }
 
     // Verificar que el producto existe
-    const product = pm.getProductsById(pid);
-    if (!product) {
+    const product = pm.getProductsById(parseInt(pid));
+
+    if (!product || product === "not Found") {
       return res.status(404).json({
         error: "Producto no encontrado",
         message: `No se encontró un producto con ID ${pid}`

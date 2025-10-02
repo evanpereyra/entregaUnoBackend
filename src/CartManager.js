@@ -13,10 +13,10 @@ class CartManager {
        prod.forEach(item => {
          item.quantity = 1; // Agrega una cantidad por defecto
        });
-       console.log(this.#carts)
+       
        const cid = this.#generarId()
        const carrito = {cid: cid, productos: prod }
-       console.log(carrito)
+       
        this.#carts.push(carrito)
        
        escrituraCart(this.getCart());
@@ -43,19 +43,18 @@ class CartManager {
                const quantity = 1
                 this.#carts[index].productos.push({ product , quantity })
                escrituraCart(this.getCart());
-               return "Producto agregado al carrito";
             } 
        
          const product = parseInt(p)
          this.#carts[index].productos[iPro].quantity += 1
          escrituraCart(this.getCart());
 
-         return "Cantidad del producto aumentada en el carrito";
+        return product;    
     }
 
     getCartByCid(cid){
          let carrito = this.#carts.filter(e=> e.cid == cid)
-         console.log(carrito[0])
+         
          carrito = carrito[0]
          if(!carrito) return "No existe el cart indicado " 
          return carrito

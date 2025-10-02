@@ -36,9 +36,11 @@ class ProductManager {
     }
 
     getProductsById(id){
-        
-       return ( this.#products.find((element => element.id == id)) || "not Found")
-
+        console.log("Buscando en ProductManager ID:", id, "Tipo:", typeof id);
+        console.log("Productos en ProductManager:", this.#products.map(p => ({id: p.id, title: p.title})));
+        const result = this.#products.find((element => element.id == id));
+        console.log("Resultado de búsqueda:", result);
+        return result || "not Found";
     }
 
     actualizarProducto(id, prod){
