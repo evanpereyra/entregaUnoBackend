@@ -75,7 +75,7 @@ app.get("/api/products/:pid", (req,res)=>{
 
 // agregar un nuevo producto con los siguientes campos
              
-app.post("/api/products", (request, response)=>{
+app.post("/api/products/", (request, response)=>{
     try {
         const p = request.body;
         
@@ -87,8 +87,8 @@ app.post("/api/products", (request, response)=>{
             });
         }
         
-        const requiredFields = ['title', 'description', 'price', 'code', 'stock','status', 'category', 'thumbnails'];
-        const missingFields = requiredFields.filter(field => !p[field] || p[field].length!= 0 );
+        const requiredFields = ['title', 'description', 'price', 'code', 'stock','status', 'category'];
+        const missingFields = requiredFields.filter(field => !p[field]);
         
         if (missingFields.length > 0) {
             return response.status(400).json({
@@ -113,18 +113,19 @@ app.post("/api/products", (request, response)=>{
         }
 
         const result = pm.addProducto(p);
-        
-        if (!result.success) {
+     
+
+        if (!result || typeof result === "string") {
             return response.status(409).json({
                 error: "Error al agregar producto",
-                message: result.message || "No se pudo agregar el producto"
+                message: result || "No se pudo agregar el producto"
             });
         }
 
         response.status(201).json({
             success: true,
             message: 'Producto agregado exitosamente',
-            data: result.product
+            data: result
         });
     } catch (error) {
         response.status(500).json({
@@ -142,7 +143,7 @@ app.post("/api/products", (request, response)=>{
 */
 
 
-app.post("/api/products/:pid", (request,response)=>{
+app.put("/api/products/:pid", (request,response)=>{
     try {
         const pid = request.params.pid;
         const prod = request.body;
@@ -156,7 +157,7 @@ app.post("/api/products/:pid", (request,response)=>{
         }
 
         // Validar que se envíe un body con datos
-        if (!prod || Object.keys(prod).length === 0) {
+        if (!prod || Object.keys(prod).length == 0) {
             return response.status(400).json({
                 error: "Datos de actualización faltantes",
                 message: "Se requieren los datos a actualizar en el body de la petición"
@@ -189,17 +190,17 @@ app.post("/api/products/:pid", (request,response)=>{
 
         const result = pm.actualizarProducto(pid, prod);
 
-        if (!result.success) {
+        if (!result || typeof result === "string") {
             return response.status(409).json({
                 error: "Error al actualizar producto",
-                message: result.message || "No se pudo actualizar el producto"
+                message: result || "No se pudo actualizar el producto"
             });
         }
 
         response.json({
             success: true,
             message: "Producto actualizado correctamente",
-            data: result.product
+            data: result
         });
     } catch (error) {
         response.status(500).json({
@@ -217,7 +218,7 @@ app.delete("/api/products/:pid", (request,response)=>{
         const pid = request.params.pid;
 
         // Validar que el ID sea un número válido
-        if (!pid || isNaN(pid)) {
+        if (!pid) {
             return response.status(400).json({
                 error: "ID de producto inválido",
                 message: "El ID del producto debe ser un número válido"
@@ -235,10 +236,10 @@ app.delete("/api/products/:pid", (request,response)=>{
 
         const result = pm.eliminarElemento(pid);
 
-        if (!result.success) {
+        if (!result || typeof result === "string") {
             return response.status(409).json({
                 error: "Error al eliminar producto",
-                message: result.message || "No se pudo eliminar el producto"
+                message: result || "No se pudo eliminar el producto"
             });
         }
 
@@ -272,12 +273,13 @@ app.get("/api/carts/:cid", (req, res)=>{
       });
     }
 
-    const carrito = cm.getCart(cid);
+    const carrito = cm.getCartByCid(cid);
 
-    if (!carrito) {
+    if (!carrito || typeof carrito === "string") {
       return res.status(404).json({
         error: "Carrito no encontrado",
         message: `No se encontró un carrito con ID ${cid}`
+        
       });
     }
 
@@ -299,25 +301,38 @@ app.get("/api/carts/:cid", (req, res)=>{
 app.post("/api/carts/", (req, res)=>{
   try {
     // Crear un nuevo carrito vacío
-    const newCart = {
+     const prod = req.body;
      
-      products: []
-    };
 
-    const result = cm.createCart ? cm.createCart(newCart) : { success: true, cart: newCart };
+     if (!prod || Object.keys(prod).length === 0) {
+            return res.status(400).json({
+                error: "Datos de producto faltantes",
+                message: "Se requieren los datos del producto en el body de la petición"
+            });
+        }
+       
+        if (!Array.isArray(prod) || prod.length === 0) {
+            return res.status(400).json({
+                error: "Campos faltantes",
+                message: `Debe agregar al menos un producto`
+            });
+        }
 
-    if (!result.success) {
+        const result = cm.addCarrito(prod)
+    console.log("llego aca")
+    if (!result || typeof result === "string") {
       return res.status(409).json({
         error: "Error al crear carrito",
-        message: result.message || "No se pudo crear el carrito"
+        message: result || "No se pudo crear el carrito"
       });
     }
-
+    
     res.status(201).json({
       success: true,
       message: "Carrito creado exitosamente",
-      data: result.cart || newCart
+      data: result
     });
+
   } catch (error) {
     res.status(500).json({
       error: "Error interno del servidor",
@@ -334,14 +349,14 @@ app.post("/api/carts/:cid/product/:pid", (req, res)=>{
     const quantity = req.body.quantity || 1; // Cantidad por defecto es 1
 
     // Validar que los IDs sean números válidos
-    if (!cid || isNaN(cid)) {
+    if (!cid) {
       return res.status(400).json({
         error: "ID de carrito inválido",
         message: "El ID del carrito debe ser un número válido"
       });
     }
 
-    if (!pid || isNaN(pid)) {
+    if (!pid) {
       return res.status(400).json({
         error: "ID de producto inválido",
         message: "El ID del producto debe ser un número válido"
@@ -357,7 +372,7 @@ app.post("/api/carts/:cid/product/:pid", (req, res)=>{
     }
 
     // Verificar que el carrito existe
-    const cart = cm.getCart(cid);
+    const cart = cm.getCartByCid(cid);
     if (!cart) {
       return res.status(404).json({
         error: "Carrito no encontrado",
@@ -382,12 +397,12 @@ app.post("/api/carts/:cid/product/:pid", (req, res)=>{
       });
     }
 
-    const result = cm.addProductToCart ? cm.addProductToCart(cid, pid, quantity) : { success: true };
+    const result = cm.addProductos(cid, pid);
 
-    if (!result.success) {
+    if (!result || typeof result === "string") {
       return res.status(409).json({
         error: "Error al agregar producto al carrito",
-        message: result.message || "No se pudo agregar el producto al carrito"
+        message: result || "No se pudo agregar el producto al carrito"
       });
     }
 
