@@ -1,0 +1,17 @@
+[
+   {
+    "cid": 1,
+    "total": 0,
+    "productos": [
+      {"product" : 1,
+       "quantity": 5,
+       "subtotal": 9999.95
+       },
+      {"product" : 2,
+      "quantity": 3,
+      "subtotal": 9999.95
+       }
+    ]
+  }
+
+]

@@ -1,0 +1,3 @@
+{"id": 1, "title": "Notebook Lenovo", "description": "Notebook 15 pulgadas", "code": "NB-001", "price": 750000, "status": true, "stock": 25, "category": "Tecnología", "thumbnails": ["img/notebook1.png", "img/notebook2.png"]}
+{"id": 2, "title": "Auriculares Sony", "description": "Auriculares inalámbricos con cancelación de ruido", "code": "AU-101", "price": 95000, "status": true, "stock": 50, "category": "Accesorios", "thumbnails": ["img/auricular1.png"]}
+{"id": 3, "title": "Mouse Logitech", "description": "Mouse ergonómico inalámbrico", "code": "MS-250", "price": 32000, "status": false, "stock": 0, "category": "Periféricos", "thumbnails": ["img/mouse1.png", "img/mouse2.png"]}
