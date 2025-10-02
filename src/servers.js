@@ -26,7 +26,6 @@ app.get("/api/products/", (req, res)=>{
             });
         }
         res.json({
-            success: true,
             data: products,
             total: products.length
         });
@@ -53,7 +52,7 @@ app.get("/api/products/:pid", (req,res)=>{
 
         const prod = pm.getProductsById(pid);
         
-        if (!prod) {
+        if (!prod || prod === "not Found") {
             return res.status(404).json({
                 error: "Producto no encontrado",
                 message: `No se encontró un producto con ID ${pid}`
@@ -61,7 +60,6 @@ app.get("/api/products/:pid", (req,res)=>{
         }
 
         res.json({
-            success: true,
             data: prod,
             message: "Producto encontrado exitosamente"
         });
@@ -89,8 +87,8 @@ app.post("/api/products", (request, response)=>{
             });
         }
         
-        const requiredFields = ['title', 'description', 'price', 'code', 'stock',];
-        const missingFields = requiredFields.filter(field => !p[field]);
+        const requiredFields = ['title', 'description', 'price', 'code', 'stock','status', 'category', 'thumbnails'];
+        const missingFields = requiredFields.filter(field => !p[field] || p[field].length!= 0 );
         
         if (missingFields.length > 0) {
             return response.status(400).json({
@@ -99,7 +97,7 @@ app.post("/api/products", (request, response)=>{
             });
         }
 
-        // Validar tipos de datos
+        
         if (typeof p.price !== 'number' || p.price <= 0) {
             return response.status(400).json({
                 error: "Precio inválido",
@@ -150,7 +148,7 @@ app.post("/api/products/:pid", (request,response)=>{
         const prod = request.body;
 
         // Validar que el ID sea un número válido
-        if (!pid || isNaN(pid)) {
+        if (!pid) {
             return response.status(400).json({
                 error: "ID de producto inválido",
                 message: "El ID del producto debe ser un número válido"
@@ -165,7 +163,7 @@ app.post("/api/products/:pid", (request,response)=>{
             });
         }
 
-        // Validar que el producto exista antes de actualizar
+        
         const existingProduct = pm.getProductsById(pid);
         if (!existingProduct) {
             return response.status(404).json({
@@ -174,7 +172,7 @@ app.post("/api/products/:pid", (request,response)=>{
             });
         }
 
-        // Validar tipos de datos si se proporcionan
+        
         if (prod.price !== undefined && (typeof prod.price !== 'number' || prod.price <= 0)) {
             return response.status(400).json({
                 error: "Precio inválido",
@@ -302,7 +300,7 @@ app.post("/api/carts/", (req, res)=>{
   try {
     // Crear un nuevo carrito vacío
     const newCart = {
-     /// id: Date.now(), // ID único basado en timestamp
+     
       products: []
     };
 
