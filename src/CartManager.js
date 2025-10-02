@@ -1,3 +1,4 @@
+const { escrituraCart } = require("./escritura");
 const { objetoJsonCart } = require("./lecturaProducts");
 
 class CartManager {
@@ -7,47 +8,62 @@ class CartManager {
     }
 
     addCarrito(prod){
-       if(!prod && prod.length == 0) return "No hay producto para este carrito"
+       if(!prod || Object.keys(prod).length === 0) return "No hay producto para este carrito"
+     
+       prod.forEach(item => {
+         item.quantity = 1; // Agrega una cantidad por defecto
+       });
        
-       const carrito = {id: this.#generarId(), productos: prod}
-
+       const cid = this.#generarId()
+       const carrito = {cid: cid, productos: prod }
+       
        this.#carts.push(carrito)
        
+       escrituraCart(this.getCart());
+       
+       return carrito
         
     }
+   
+    getCart(){
+        return this.#carts;
+    }
 
-    addProductos(cid,  p){
-        if (!id && !p) return "error, valores indefininos"
+    addProductos(cid, p){
+        if (!cid || !p) return "error, valores indefinidos"
         
         const index = this.#carts.findIndex(c => c.cid === parseInt(cid));
         if (index === -1) {
-               return res.status(404).json({ mensaje: 'Carrito no encontrado' });
+               return "Carrito no encontrado";
             }
         
-        const iPro = this.#carts[index].productos.findIndex(p => p.product === parseInt(p))
-        if (index === -1) {
+        const iPro = this.#carts[index].productos.findIndex(producto => producto.product === parseInt(p))
+        if (iPro === -1) {
                const product = parseInt(p)
                const quantity = 1
-               this.#carts[index].productos.push({ product , quantity })
-               return res.status(201).json({ mensaje: 'producto agregado' });
+                this.#carts[index].productos.push({ product , quantity })
+               escrituraCart(this.getCart());
             } 
        
          const product = parseInt(p)
-         const quantity = 1
-         this.#carts[index].productos[iPro].quantity = +1
+         this.#carts[index].productos[iPro].quantity += 1
+         escrituraCart(this.getCart());
 
-        return res.status(201).json({ mensaje: 'Carrito se agrego un producto mas' });    
-            
-
+        return product;    
     }
 
-    getCart(id){
-         return this.#carts.filter((e)=> e.cid == id )
+    getCartByCid(cid){
+         let carrito = this.#carts.filter(e=> e.cid == cid)
+         
+         carrito = carrito[0]
+         if(!carrito) return "No existe el cart indicado " 
+         return carrito
     }
 
     #generarId(){
-        const c = carts[this.#carts.length-1]
-        return c.id+1
+        if (this.#carts.length === 0) return 1;
+        const c = this.#carts[this.#carts.length-1]
+        return c.cid + 1
     }
 
 }

@@ -1,17 +1,69 @@
 [
-   {
+  {
     "cid": 1,
-    "total": 0,
     "productos": [
-      {"product" : 1,
-       "quantity": 5,
-       "subtotal": 9999.95
-       },
-      {"product" : 2,
-      "quantity": 3,
-      "subtotal": 9999.95
-       }
+      {
+        "product": 1,
+        "quantity": 6
+      },
+      {
+        "product": 2,
+        "quantity": 3
+      },
+      {
+        "product": 5,
+        "quantity": 3
+      },
+      {
+        "product": 6,
+        "quantity": 1
+      },
+      {
+        "product": 7,
+        "quantity": 3
+      },
+      {
+        "product": 8,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "cid": 2,
+    "productos": [
+      {
+        "product": 3,
+        "quantity": 2
+      },
+      {
+        "product": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "cid": 3,
+    "productos": [
+      {
+        "product": 1,
+        "quantity": 2
+      },
+      {
+        "product": 2,
+        "quantity": 5
+      },
+      {
+        "product": 8,
+        "quantity": 3
+      },
+      {
+        "product": 9,
+        "quantity": 2
+      },
+      {
+        "product": 10,
+        "quantity": 1
+      }
     ]
   }
-
 ]

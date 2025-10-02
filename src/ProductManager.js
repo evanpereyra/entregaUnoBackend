@@ -12,19 +12,17 @@ class ProductManager {
         const primer= this.#products[this.#products.length - 1] || {}
         let primerId = primer.id || 0
              
-      //  if (!(producto.title && producto.description && producto.code && producto.price && producto.thumbnail)) {return  console.log("debe ingresar campos obligatorios")}
+        if (!(producto.title && producto.description && producto.code && producto.price)) {return "debe ingresar campos obligatorios"}
 
-        if (!(producto.title && producto.description && producto.code && producto.price)) {return  console.log("debe ingresar campos obligatorios")}
-
-        if (this.#products.find((element => element.code === producto.code))) { return  console.log (" el codigo esta repetido ")}
+        if (this.#products.find((element => element.code === producto.code))) { return "el codigo esta repetido "}
  
  
        producto.id = primerId + 1 
-         
-       console.log (primerId)
+      
 
        this.#products.push(producto)
        escrituraProducto(this.getProducts());
+       return producto
     }
     
     setProduct(productos){
@@ -38,21 +36,20 @@ class ProductManager {
     }
 
     getProductsById(id){
-        
-       return ( this.#products.find((element => element.id == id)) || "not Found"
-
-
-       )
-
+        console.log("Buscando en ProductManager ID:", id, "Tipo:", typeof id);
+        console.log("Productos en ProductManager:", this.#products.map(p => ({id: p.id, title: p.title})));
+        const result = this.#products.find((element => element.id == id));
+        console.log("Resultado de búsqueda:", result);
+        return result || "not Found";
     }
 
     actualizarProducto(id, prod){
           const index = this.#products.findIndex(p => p.id === parseInt(id));
            if (index === -1) {
-               return res.status(404).json({ mensaje: 'Producto no encontrado' });
+               return "Producto no encontrado";
             }
           
-           const {title , description,code,price, status,stock,category} = prod 
+           const {title , description,code,price, status,stock,category, thumbnails } = prod 
    
            if(title)this.#products[index].title = prod.title;  
            if(description)this.#products[index].description = prod.description;  
@@ -61,16 +58,20 @@ class ProductManager {
            if(status)this.#products[index].status = prod.status;  
            if(stock)this.#products[index].stock = prod.stock;  
            if(category)this.#products[index].category = prod.category;   
-           if(prod.thumbnails)this.#products[index].thumbnails.push(prod.category);  
+           if(thumbnails.length != 0)this.#products[index].thumbnails.push(...thumbnails);  
            
            escrituraProducto(this.getProducts());
 
+         return this.#products[index] 
     }
 
     eliminarElemento(pid){
+        const eliminado = this.getProductsById(pid)
+        if(!eliminado || eliminado === "not Found" ) return "No se encontro el producto a eliminar"
         const nuevo = this.#products.filter((element) => element.id != pid)
         this.#products = nuevo
         escrituraProducto(this.#products); 
+        return eliminado;
     }
 }
 

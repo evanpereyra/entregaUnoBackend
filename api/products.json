@@ -37,7 +37,36 @@
     "stock": 0,
     "category": "Accesorios",
     "thumbnails": [
-      "images/botella1.jpg"
+      "images/botella1.jpg",
+      "images/botella3.jpg"
     ]
+  },
+  {
+    "title": "Producto de Prueba",
+    "description": "Este es un producto de ejemplo para realizar pruebas de persistencia",
+    "code": "PRB-001",
+    "price": 1234.56,
+    "status": true,
+    "stock": 10,
+    "category": "Testing",
+    "thumbnails": [
+      "images/prueba1.jpg",
+      "images/prueba2.jpg"
+    ],
+    "id": 4
+  },
+  {
+    "title": "Producto de Prueba",
+    "description": "Este es un producto de ejemplo para realizar pruebas de persistencia",
+    "code": "PRB-002",
+    "price": 1234.56,
+    "status": true,
+    "stock": 10,
+    "category": "Testing",
+    "thumbnails": [
+      "images/prueba1.jpg",
+      "images/prueba2.jpg"
+    ],
+    "id": 5
   }
 ]

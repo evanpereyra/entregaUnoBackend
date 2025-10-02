@@ -2,8 +2,10 @@
   "name": "entrega1",
   "version": "1.0.0",
   "description": "primera entrega ",
-  "main": "lectura.js",
+  "main": "src/servers.js",
   "scripts": {
+    "start": "node src/servers.js",
+    "dev": "node src/servers.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
